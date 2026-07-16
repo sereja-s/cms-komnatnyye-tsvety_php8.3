@@ -17,7 +17,8 @@ use core\base\model\BaseModelMethods;
  */
 abstract class BaseModel extends BaseModelMethods
 {
-	protected $db;
+	//protected $db;
+	protected ?\mysqli $db = null;
 
 	/** 
 	 * Метод в котором будем осуществлять подключения к БД
@@ -39,23 +40,30 @@ abstract class BaseModel extends BaseModelMethods
 
 		// если соединение с БД удалось, установим кодировку соединения (испольуем метод библиотеки mysqli: query()), 
 		// которому на вход подаётся запрос на устаноку соединения(SET NAMES UTF8)
-		$this->db->query("SET NAMES UTF8");
+		//$this->db->query("SET NAMES utf8mb4");
+
+		$this->db->set_charset('utf8mb4');
 	}
 
 	/**
-	 * @param $query
-	 * @param string $crud = r - SELECT / c - INSERT / u - UPDATE / d - DELETE
-	 * @param false $return_id
-	 * @return array|bool|mixed
-	 * @throws DbException
-	 */
-
-	// Создадим метод query() с одноимённым названием (как и метод в классе (библиотеке) mysqli, использованный ранее)
-	// сделаем его финальным (не дадим возможности переопределять его в дочерних классах)	 
-
-	/** 
-	 *  Метод делает запрос к БД и возвращает его результат ($crud = r - SELECT / c - INSERT )
-	 * (на вход передадим: переменную с запросом ($query), метод которым будем этот запрос осуществлять (переменная $crud со значением по умолчанию: r (read- чтение)), идентификатор вставки $return_id со значением false)	  
+	 * Выполняет SQL-запрос к базе данных.
+	 *
+	 * Метод используется всеми CRUD-операциями модели.
+	 *
+	 * @param string $query SQL-запрос.
+	 * @param string $crud Тип операции:
+	 *                     - r — SELECT;
+	 *                     - c — INSERT;
+	 *                     - u — UPDATE;
+	 *                     - d — DELETE.
+	 * @param bool $return_id Вернуть идентификатор добавленной записи (только для INSERT).
+	 *
+	 * @return array|int|bool
+	 *         array — результат SELECT;
+	 *         int   — идентификатор новой записи;
+	 *         bool  — успешное выполнение INSERT/UPDATE/DELETE либо отсутствие строк при SELECT.
+	 *
+	 * @throws DbException Если произошла ошибка выполнения SQL-запроса.
 	 */
 	final public function query($query, $crud = 'r', $return_id = false)
 	{
@@ -80,7 +88,7 @@ abstract class BaseModel extends BaseModelMethods
 		// каждый следующий кейс проверяется, если не выполнен(не было равенства) предыдущий
 		switch ($crud) {
 
-				// проверим кейс: r (чтение)
+			// проверим кейс: r (чтение)
 			case 'r':
 				// если в св-во num_rows нашего объекта в $result (содержащего в себе выборку из базы данных) что то пришло из БД
 				if ($result->num_rows) {
@@ -99,7 +107,7 @@ abstract class BaseModel extends BaseModelMethods
 				return false;
 				break;
 
-				// проверим кейс: с (создание)
+			// проверим кейс: с (создание)
 			case 'c':
 
 				// если переменная $return_id = true
@@ -110,7 +118,7 @@ abstract class BaseModel extends BaseModelMethods
 				return true;
 				break;
 
-				// во всех остальных случаях 
+			// во всех остальных случаях 
 			default:
 
 				// выполнится код по умолчанию:
@@ -275,10 +283,17 @@ abstract class BaseModel extends BaseModelMethods
 	final public function add($table, $set = [])
 	{
 		// если это массив и не пуст, то сохраним его в результат, иначе сохраним суперглобальный массив $_POST
-		$set['fields'] = (is_array($set['fields']) && !empty($set['fields'])) ? $set['fields'] : $_POST;
+		//$set['fields'] = (is_array($set['fields']) && !empty($set['fields'])) ? $set['fields'] : $_POST;
+
+		$set['fields'] = (isset($set['fields']) && is_array($set['fields']) && !empty($set['fields']))
+			? $set['fields']
+			: $_POST;
 
 		// если это массив и не пуст, то сохраним его в результат, иначе вернём false
-		$set['files'] = (is_array($set['files']) && !empty($set['files'])) ? $set['files'] : false;
+		//$set['files'] = (is_array($set['files']) && !empty($set['files'])) ? $set['files'] : false;
+		$set['files'] = (isset($set['files']) && is_array($set['files']) && !empty($set['files']))
+			? $set['files']
+			: false;
 
 
 		// если ничего не пришло в ячейки: fields и files массива $set
@@ -290,10 +305,14 @@ abstract class BaseModel extends BaseModelMethods
 
 
 		// если что то пришло в $set['return_id'], сохраним true , иначе false
-		$set['return_id'] = $set['return_id'] ? true : false;
+		//$set['return_id'] = $set['return_id'] ? true : false;
+		$set['return_id'] = isset($set['return_id']) ? (bool)$set['return_id'] : false;
 
 		// сделаем проверку: теперь для ячейки except массива $set (то что пришло в неё это массив? не пустой?) тогда сохраним это, иначе вернёт false
-		$set['except'] = (is_array($set['except']) && !empty($set['except'])) ? $set['except'] : false;
+		//$set['except'] = (is_array($set['except']) && !empty($set['except'])) ? $set['except'] : false;
+		$set['except'] = (isset($set['except']) && is_array($set['except']) && !empty($set['except']))
+			? $set['except']
+			: false;
 
 		// примем массив вставки
 		// массив создаст метод createInsert() Результат работы метода сохраним в переменной $insert_arr
@@ -315,20 +334,32 @@ abstract class BaseModel extends BaseModelMethods
 	final public function edit($table, $set = [])
 	{
 		// начало как в final public function add()
-		$set['fields'] = (is_array($set['fields']) && !empty($set['fields'])) ? $set['fields'] : $_POST;
-		$set['files'] = (is_array($set['files']) && !empty($set['files'])) ? $set['files'] : false;
+		//$set['fields'] = (is_array($set['fields']) && !empty($set['fields'])) ? $set['fields'] : $_POST;
+		$set['fields'] = (isset($set['fields']) && is_array($set['fields']) && !empty($set['fields']))
+			? $set['fields']
+			: $_POST;
+
+		//$set['files'] = (is_array($set['files']) && !empty($set['files'])) ? $set['files'] : false;
+		$set['files'] = (isset($set['files']) && is_array($set['files']) && !empty($set['files']))
+			? $set['files']
+			: false;
 
 		if (!$set['fields'] && !$set['files']) {
 			return false;
 		}
 
-		$set['except'] = (is_array($set['except']) && !empty($set['except'])) ? $set['except'] : false;
+		//$set['except'] = (is_array($set['except']) && !empty($set['except'])) ? $set['except'] : false;
+		$set['except'] = (isset($set['except']) && is_array($set['except']) && !empty($set['except']))
+			? $set['except']
+			: false;
 
-		// Если в ячейку all_rows массива $set ничего не пришло (false)
-		if (!$set['all_rows']) {
+		$where = '';
+
+		// Если в ячейку all_rows массива $set ничего не пришло (false)		
+		if (empty($set['all_rows'])) {
 
 			// Если в ячейку where массива $set что то пришло (true)
-			if ($set['where']) {
+			if (!empty($set['where'])) {
 				$where = $this->createWhere($set);
 			} else {
 				$columns = $this->showColumns($table);
@@ -338,7 +369,8 @@ abstract class BaseModel extends BaseModelMethods
 				}
 
 				// проверка: если первичный ключ есть (в ячеке id_row массива) $columns и в массиве: $set['fields'] есть така же ячейка как и первичный ключ (т.е. $columns['id_row'])
-				if ($columns['id_row'] && $set['fields'][$columns['id_row']]) {
+
+				if (!empty($columns['id_row']) && isset($set['fields'][$columns['id_row']])) {
 
 					// тогда создадим переменную: $where и запишем строку в которой назваание поля которое имеет первичный ключ $columns['id_row'] будет равно значению. которое пришло: $set['fields'][$columns['id_row']])
 					$where = 'WHERE ' . $columns['id_row'] . '=' . $set['fields'][$columns['id_row']];
@@ -410,7 +442,11 @@ abstract class BaseModel extends BaseModelMethods
 			return false;
 		}
 
-		if (is_array($set['fields']) && !empty($set['fields'])) {
+
+		//if (is_array($set['fields']) && !empty($set['fields'])) {
+
+
+		if (!empty($set['fields']) && is_array($set['fields'])) {
 
 			// если пришло поле с первичным ключём 
 			if ($columns['id_row']) {
@@ -441,10 +477,14 @@ abstract class BaseModel extends BaseModelMethods
 		} else {
 			$join_arr = $this->createJoin($set, $table);
 			$join = $join_arr['join'];
-			$join_tables = $join_arr['tables'];
+			//$join_tables = $join_arr['tables'];
 
 			// формируем запрос на удалление данных из БД
-			$query = 'DELETE ' . $table . $join_tables . ' FROM ' . $table . ' ' . $join . ' ' . $where;
+			//$query = 'DELETE ' . $table . $join_tables . ' FROM ' . $table . ' ' . $join . ' ' . $where;
+			$query = 'DELETE ' . $table .
+				' FROM ' . $table .
+				' ' . $join .
+				' ' . $where;
 		}
 
 		// отправим (вернём) запрос

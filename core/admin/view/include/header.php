@@ -106,12 +106,12 @@
 						<a href="<?= $this->adminPath ?>show/<?= $table ?>" class="vg-wrap vg-element vg-full vg-center <?php if ($table === $this->table) echo 'active' ?>">
 							<div class="vg-element vg-half  vg-center">
 								<div>
-									<img src="<?= PATH . ADMIN_TEMPLATE ?>img/<?= $item['img'] ? $item['img'] : 'page-new.png' ?>" alt="pages">
-									<span class="text-min vg-firm-color5"><?= $item['name'] ? $item['name'] : $table ?></span>
+									<img src="<?= PATH . ADMIN_TEMPLATE ?>img/<?= $item['img'] ?? 'page-new.png' ?>" alt="pages">
+									<span class="text-min vg-firm-color5"><?= $item['name'] ?? $table ?></span>
 								</div>
 							</div>
 							<div class="vg-element vg-half vg-center vg_hidden">
-								<span class="vg-text vg-firm-color5"><?= $item['name'] ? $item['name'] : $table ?></span>
+								<span class="vg-text vg-firm-color5"><?= $item['name'] ?? $table ?></span>
 							</div>
 						</a>
 

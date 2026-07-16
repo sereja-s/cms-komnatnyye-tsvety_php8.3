@@ -5,12 +5,40 @@ namespace libraries;
 class TextModify
 {
 	protected $translitArr = [
-		'а' => 'a', 'б' => 'b', 'в' => 'v', 'г' => 'g', 'д' => 'd', 'е' => 'e',
-		'ё' => 'yo', 'ж' => 'zh', 'з' => 'z', 'и' => 'i', 'й' => 'y', 'к' => 'k',
-		'л' => 'l', 'м' => 'm', 'н' => 'n', 'о' => 'o', 'п' => 'p', 'р' => 'r',
-		'с' => 's', 'т' => 't', 'у' => 'u', 'ф' => 'f', 'х' => 'h', 'ц' => 'ts',
-		'ч' => 'ch', 'ш' => 'sh', 'щ' => 'sch', 'ъ' => 'y', 'ы' => 'y',
-		'ь' => 'y', 'э' => 'e', 'ю' => 'yu', 'я' => 'ya', ' ' => '-',
+		'а' => 'a',
+		'б' => 'b',
+		'в' => 'v',
+		'г' => 'g',
+		'д' => 'd',
+		'е' => 'e',
+		'ё' => 'yo',
+		'ж' => 'zh',
+		'з' => 'z',
+		'и' => 'i',
+		'й' => 'y',
+		'к' => 'k',
+		'л' => 'l',
+		'м' => 'm',
+		'н' => 'n',
+		'о' => 'o',
+		'п' => 'p',
+		'р' => 'r',
+		'с' => 's',
+		'т' => 't',
+		'у' => 'u',
+		'ф' => 'f',
+		'х' => 'h',
+		'ц' => 'ts',
+		'ч' => 'ch',
+		'ш' => 'sh',
+		'щ' => 'sch',
+		'ъ' => 'y',
+		'ы' => 'y',
+		'ь' => 'y',
+		'э' => 'e',
+		'ю' => 'yu',
+		'я' => 'ya',
+		' ' => '-',
 	];
 
 	// массив для корректного формирования букв (при транслитерации) после мягкого знака
@@ -48,13 +76,15 @@ class TextModify
 						case 'ъ':
 
 							// если значение в $temp_arr[$key + 1] (т.е. символ следующий за $key) равно е, то к переменной: $link добавим символ: y
-							if ($temp_arr[$key + 1] == 'е') $link .= 'y';
+							//if ($temp_arr[$key + 1] == 'е') $link .= 'y';
+							if (($temp_arr[$key + 1] ?? null) === 'е') $link .= 'y';
 
 							break;
 
 						case 'ы':
 
-							if ($temp_arr[$key + 1] == 'й') $link .= 'i';
+							//if ($temp_arr[$key + 1] == 'й') $link .= 'i';
+							if (($temp_arr[$key + 1] ?? null) === 'й') $link .= 'i';
 
 							else $link .= $this->translitArr[$char];
 
@@ -64,14 +94,19 @@ class TextModify
 
 							// если значение в $temp_arr[$key + 1] (т.е. символ следующий за $key)- не последний символ массива 
 							// и при этом находится в массиве, который находится в свойстве: $lowelLetter
-							if ($temp_arr[$key + 1] !== count($temp_arr) && in_array($temp_arr[$key + 1], $this->lowelLetter)) {
+							if (
+								/* $temp_arr[$key + 1] !== count($temp_arr)
+								&& in_array($temp_arr[$key + 1], $this->lowelLetter) */
+								isset($temp_arr[$key + 1]) &&
+								in_array($temp_arr[$key + 1], $this->lowelLetter, true)
+							) {
 
 								// то добавим к переменной: $link соответствующий символ из translitArr[$char], т.е. для ь- это у
 								$link .= $this->translitArr[$char];
 							}
 							break;
 
-							// в остальных случаях
+						// в остальных случаях
 						default:
 
 							$link .= $this->translitArr[$char];

@@ -84,7 +84,7 @@
 	<meta name="keywords" content="<?= htmlspecialchars($keywords) ?>">
 	<meta property="og:title" content="<?= htmlspecialchars($ogTitle) ?>">
 	<meta property="og:description" content="<?= htmlspecialchars($ogDescription) ?>">
-	<meta property="og:image" content="/favicon.svg">
+
 	<link rel="icon" href="<?= htmlspecialchars(SITE_URL) ?>/favicon.svg" type="image/svg+xml">
 	<title><?= htmlspecialchars($title) ?></title>
 
@@ -107,9 +107,9 @@
 										<?php if (!empty($this->menu['catalog'])) : ?>
 
 											<li class="menu__item">
-												<!-- <a href="<?= $this->alias('catalog') ?>" class="menu__link">Подарки</a> -->
+
 												<button data-spoller type="button" class="menu__link">КАТАЛОГ</button>
-												<!-- <button data-spoller type="button" class="menu__arrow _icon-arrow-down"></button> -->
+
 												<ul class="menu__sub-list">
 
 													<?php foreach ($this->menu['catalog'] as $item) : ?>
@@ -129,7 +129,7 @@
 
 											<li class="menu__item">
 
-												<button data-spoller type="button" class="menu__link-cat" style="margin-bottom: 0; cursor: auto; font-weight: 700; font-size: 22px; color: #ff0101">Позвонить</button>
+												<button data-spoller type="button" class="menu__link-cat">Позвонить</button>
 
 												<ul class="menu__sub-list">
 
@@ -153,25 +153,33 @@
 
 											<li class="menu__item">
 
-												<button data-spoller type="button" class="menu__link-cat" style="margin-bottom: 0; cursor: auto; font-weight: 700; font-size: 22px; color: #ff0101;">Написать</button>
+												<button data-spoller type="button" class="menu__link-cat">Написать</button>
 
 												<ul class="menu__sub-list">
 
-													<?php foreach ($this->socials as $item) : ?>
+													<?php if (!empty($this->socials) && is_array($this->socials)) : ?>
 
-														<li class="menu__sub-item"><a href="<?= $this->alias($item['external_alias']) ?>" class="menu__sub-link"><?= $item['name'] ?></a></li>
+														<?php foreach ($this->socials as $item) : ?>
 
-													<?php endforeach; ?>
+															<li class="menu__sub-item"><a href="<?= $this->alias($item['external_alias']) ?>" class="menu__sub-link"><?= $item['name'] ?></a></li>
 
-													<?php foreach ($this->emails as $email) : ?>
+														<?php endforeach; ?>
 
-														<li class="menu__sub-item">
+													<?php endif; ?>
 
-															<a href="mailto:<?= $email['name'] ?>" target="_blank" class="menu__sub-link"><?= $email['name'] ?></a>
+													<?php if (!empty($this->emails) && is_array($this->emails)) : ?>
 
-														</li>
+														<?php foreach ($this->emails as $email) : ?>
 
-													<?php endforeach; ?>
+															<li class="menu__sub-item">
+
+																<a href="mailto:<?= $email['name'] ?>" target="_blank" class="menu__sub-link"><?= $email['name'] ?></a>
+
+															</li>
+
+														<?php endforeach; ?>
+
+													<?php endif; ?>
 
 												</ul>
 

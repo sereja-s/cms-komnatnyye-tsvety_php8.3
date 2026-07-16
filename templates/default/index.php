@@ -9,13 +9,13 @@
 				<a href="<?= $this->alias('catalog') ?>" data-da=".main-slider__body,991.98" class="content-main__button btn">Весь ассортимент</a>
 			</div>
 			<div class="main-slider__slider slider-main">
-				<div class="slider-main__controls controls-slider-main">
+				<!-- <div class="slider-main__controls controls-slider-main">
 					<div class="controls-slider-main__dotts"></div>
-					<!-- <div class="controls-slider-main__arrows slider-arrows">
+					<div class="controls-slider-main__arrows slider-arrows">
 						<button type="button" class="slider-arrow slider-arrow_prev _icon-arrow-down"></button>
 						<button type="button" class="slider-arrow slider-arrow_next _icon-arrow-down"></button>
-					</div> -->
-				</div>
+					</div>
+				</div> -->
 				<div class="slider-main__body _swiper">
 
 					<?php if (!empty($sales)) : ?>
@@ -106,7 +106,7 @@
 			<div class="rooms__body" id="text">
 				<h2 class="rooms__title _title"><?= $this->set['short_content'] ?></h2>
 				<div class="rooms__text"><?= $this->set['description'] ?></div>
-				<a href="tel:<?= preg_replace('/[^+\d]/', '', $this->set['phone']) ?>" style="width: auto;" class="content-main__button btn"><?= $this->set['phone'] ?></a>
+				<a href="tel:<?= preg_replace('/[^+\d]/', '', $this->set['phone']) ?>" style="width: auto; border-radius: 35px" class="content-main__button btn"><?= $this->set['phone'] ?></a>
 			</div>
 			<div class="rooms__slider slider-rooms">
 				<div class="slider-rooms__body _swiper">
@@ -145,7 +145,7 @@
 
 	<section class="page__tips tips">
 		<div class="tips__container _container">
-			<h2 class="tips__title _title">Примеры выполненных объектов</h2>
+			<h2 class="tips__title _title"><?= $this->set['meta_name'] ?></h2>
 			<div class="tips__slider slider-tips">
 				<div class="slider-tips__body _swiper">
 
@@ -204,7 +204,7 @@
 
 <div class="s-content" style="margin: 35px 0">
 	<div class="content-block _container">
-		<p class="text-attention"><?= $this->set['keywords'] ?> купить в Донецке, Макеевке, ДНР в СтройЭксперт по адресу: <?= $this->set['address'] ?>. Сделать заказ можно по тел. <?= $this->set['phone'] ?>. Мы сообщим вам о наличии товара и его стоимость на текущий момент при уточнении деталей заказа. Цены доступные. Есть возможность доставки по Донецку, Макеевке, ДНР</p>
+		<p class="text-attention"><?= $this->set['meta_title'] ?> купить в Донецке, Макеевке ДНР. Мы сообщим вам о наличии товара и его стоимость на текущий момент при уточнении деталей заказа. Цены доступные. Есть возможность доставки по Донецку, Макеевке</p>
 
 		<p class="text"> Обращаем Ваше внимание на то, что данный интернет-сайт носит исключительно информационный характер и ни при каких условиях информационные материалы и цены, размещенные на сайте, не являются публичной офертой, определяемой положениями статьи 437 Гражданского кодекса РФ.</p>
 	</div>

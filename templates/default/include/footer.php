@@ -127,11 +127,7 @@
 			<div class="footer__subscribe subscribe">
 
 				<a href="<?= $this->alias() ?>" class="header__logo"><img src="<?= $this->img($this->set['img']) ?>" alt="<?= $this->set['name'] ?>"></a>
-				<!-- <div class="subscribe__title _footer-title">Stay Updated</div>
-				<form data-message="subscribe" data-test action="#" class="subscribe__form">
-					<input autocomplete="off" type="text" name="form[]" data-error="Ошибка" data-value="Enter your email" class="subscribe__input _req _email">
-					<button type="submit" class="subscribe__button _icon-send"></button>
-				</form> -->
+
 			</div>
 		</div>
 	</div>
@@ -165,9 +161,9 @@
 		<input type="checkbox" class="ml_btn_input" id="ml_btn_input">
 		<label for="ml_btn_input" class="ml_btn_label">
 
-			<span style="background-image: url('<?= PATH . TEMPLATE ?>assets/img/связаться-с-нами -мин.png'); background-size: 57%;" class="ml_bgimg"></span>
+			<span style="background-image: url('<?= PATH . TEMPLATE ?>assets/img/sw.png'); background-size: 57%;" class="ml_bgimg"></span>
 
-			<span style="background-image: url('<?= PATH . TEMPLATE ?>assets/img/вниз-мин.png'); background-size: 100%;" class=" ml_bgimg ml_icon ml_icon-close"></span>
+			<span style="background-image: url('<?= PATH . TEMPLATE ?>assets/img/vn.png'); background-size: 100%;" class=" ml_bgimg ml_icon ml_icon-close"></span>
 		</label>
 
 		<a class="ml_icon ml_icon_link" href="<?= $this->set['external_alias_max'] ?>">
@@ -188,6 +184,11 @@
 				<rect width="1000" height="1000" fill="url(#c)" ry="249.681" />
 				<rect width="1000" height="1000" fill="url(#d)" ry="249.681" />
 				<path fill="#fff" fill-rule="evenodd" d="M508.211 878.328c-75.007 0-109.864-10.95-170.453-54.75-38.325 49.275-159.686 87.783-164.979 21.9 0-49.456-10.95-91.248-23.36-136.873-14.782-56.21-31.572-118.807-31.572-209.508 0-216.626 177.754-379.597 388.357-379.597 210.785 0 375.947 171.001 375.947 381.604.707 207.346-166.595 376.118-373.94 377.224m3.103-571.585c-102.564-5.292-182.499 65.7-200.201 177.024-14.6 92.162 11.315 204.398 33.397 210.238 10.585 2.555 37.23-18.98 53.837-35.587a189.8 189.8 0 0 0 92.71 33.032c106.273 5.112 197.08-75.794 204.215-181.95 4.154-106.382-77.67-196.486-183.958-202.574Z" clip-rule="evenodd" />
+			</svg></a>
+		<a class="ml_icon ml_icon_link" href="<?= $this->set['external_alias_max'] ?>">
+			<svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<path d="M25 50C38.8071 50 50 38.8071 50 25C50 11.1929 38.8071 0 25 0C11.1929 0 0 11.1929 0 25C0 38.8071 11.1929 50 25 50Z" fill="#0087D0"></path>
+				<path d="M36.11 13.0399L9.40999 22.7999C8.86999 22.9999 8.85999 23.7999 9.38999 24.0299L16.23 26.7199L18.78 34.4099C18.93 34.8199 19.47 34.9599 19.81 34.6799L23.73 31.1899L31.17 35.9099C31.55 36.1499 32.06 35.9399 32.15 35.5099L36.99 13.7599C37.09 13.2799 36.59 12.8699 36.11 13.0599V13.0399ZM20.03 28.1599L19.6 32.1199L17.53 26.0299L32.1 16.8699L20.03 28.1699V28.1599Z" fill="white"></path>
 			</svg></a>
 		<a class="ml_icon ml_icon_link" href="tel:<?= preg_replace('/[^+\d]/', '', $this->set['phone']) ?>">
 			<svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">

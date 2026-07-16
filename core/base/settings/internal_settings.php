@@ -72,33 +72,10 @@ const ADMIN_CSS_JS = [
 // $this->getStyles? ,в footer.php подключить <?php $this->getScripts? )
 const USER_CSS_JS = [
 	'styles' => [
-		/* 'https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700&display=swap&subset=cyrillic',
-		'https://fonts.googleapis.com/css?family=Didact+Gothic&display=swap&subset=cyrillic',
-		'https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css',
-		'https://unpkg.com/swiper/swiper-bundle.min.css',
-		'https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css',
-		'https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.css', */
 		'assets/css/style.css',
 
 	],
 	'scripts' => [
-		/* 		'https://code.jquery.com/jquery-3.4.1.min.js',
-		'https://unpkg.com/swiper/swiper-bundle.min.js',
-		'https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js',
-		'https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js',
-		'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.2.5/gsap.min.js',
-		'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.0.2/gsap.min.js',
-		'https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/TweenMax.min.js',
-		'https://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.7/ScrollMagic.min.js',
-		'https://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.7/plugins/animation.gsap.min.js',
-		'https://cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.7/plugins/debug.addIndicators.min.js',
-		'assets/js/jquery.maskedinput.min.js',
-		'assets/js/TweenMax.min.js',
-		'assets/js/ScrollMagic.min.js',
-		'assets/js/animation.gsap.min.js',
-		'assets/js/bodyscrolllock/bodyScrollLock.min.js',
-		'assets/js/app.js',
-		'assets/js/script.js', */
 		'https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"',
 		'assets/js/vendors.min.js',
 		'assets/js/app.js',

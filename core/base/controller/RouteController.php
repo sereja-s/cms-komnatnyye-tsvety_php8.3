@@ -59,6 +59,70 @@ class RouteController extends BaseController
 			// Выпуск №130
 			$url = preg_split('/(\/)|(\?.*)/', $adress_str, 0, PREG_SPLIT_NO_EMPTY);
 
+			// ==================================================
+			// Защита от обработки статических файлов как контроллеров
+			// ==================================================
+
+			if (!empty($url[0])) {
+
+				// Расширения файлов, которые не должны попадать в маршрутизацию
+				$staticExtensions = [
+					'css',
+					'js',
+					'png',
+					'jpg',
+					'jpeg',
+					'gif',
+					'svg',
+					'webp',
+					'ico',
+					'woff',
+					'woff2',
+					'ttf',
+					'eot',
+					'map',
+					'txt',
+					'xml',
+					'json'
+				];
+
+
+				// Проверяем первый сегмент URL на наличие расширения файла
+				$pathInfo = pathinfo($url[0]);
+
+
+				if (
+					!empty($pathInfo['extension']) &&
+					in_array(strtolower($pathInfo['extension']), $staticExtensions, true)
+				) {
+
+					header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found');
+					exit;
+				}
+
+
+				// Запрещённые директории статических ресурсов
+				$staticDirectories = [
+					'templates',
+					'assets',
+					'css',
+					'js',
+					'images',
+					'img',
+					'fonts',
+					'userfiles',
+					'uploads',
+					'vendor'
+				];
+
+
+				if (in_array($url[0], $staticDirectories, true)) {
+
+					header($_SERVER['SERVER_PROTOCOL'] . ' 404 Not Found');
+					exit;
+				}
+			}
+
 			// Проверка существования ключа 0 перед использованием
 			$isAdminRequest = isset($url[0]) && $url[0] === $this->routes['admin']['alias'];
 
@@ -189,6 +253,13 @@ class RouteController extends BaseController
 				// укажем для кого создаём маршрут
 				$route = 'user';
 			}
+
+			/* $this->writeLog(
+				'URI: ' . $_SERVER['REQUEST_URI'] .
+					PHP_EOL .
+					'URL ARRAY: ' . print_r($url, true),
+				'route_debug.txt'
+			); */
 
 			// вызовем метод, который будет создавать маршрут Передаём: 1- маршрут который надо создать (описание) и 
 			// 2- массив из которого маршрут будет создан

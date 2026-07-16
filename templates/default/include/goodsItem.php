@@ -8,7 +8,7 @@
 
 			<?php if (!empty($data['new'])) : ?>
 
-				<div class="item-product__label item-product__label_new">New</div>
+				<div class="item-product__label item-product__label_new">Новинка</div>
 
 			<?php endif; ?>
 

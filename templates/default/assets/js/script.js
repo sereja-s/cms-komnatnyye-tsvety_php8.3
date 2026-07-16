@@ -469,8 +469,8 @@ if (mapWrapperElement) {
             {
               iconLayout: "default#image",
               iconImageHref: ForJS.imgMap,
-              iconImageSize: [192, 37],
-              iconImageOffset: [-125, -30]
+              iconImageSize: [100, 37],
+              iconImageOffset: [-20, -30]
             },
           );
 

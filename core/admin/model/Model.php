@@ -25,6 +25,8 @@ class Model extends BaseModel
 
 		$db = DB_NAME;
 
+		$where = '';
+
 		if ($key) {
 			$where = "AND COLUMN_NAME = '$key' LIMIT 1";
 		}
@@ -59,6 +61,8 @@ class Model extends BaseModel
 			// положим массив со знаком равенства)
 			$update_rows['operand'] = isset($update_rows['operand']) ? $update_rows['operand'] : ['='];
 
+			$postWhereValue = $_POST[$update_rows['where']] ?? null;
+
 			// если пришла инструкция в переменную: $where
 			if ($where) {
 
@@ -69,7 +73,10 @@ class Model extends BaseModel
 					'fields' => [$update_rows['where'], $row],
 					// в инструкцию положим массив
 					'where' => $where
-				])[0]; // в переменную вернём нулевой элемент
+				]);
+
+				// в переменную вернём нулевой элемент
+				$old_data = $old_data[0] ?? [];
 
 				// в стартовую позицию положим то что лежит в ячейке: $old_data[$row] (т.е. какая позиция в 
 				// menu_position уже есть у элемента в БД, такая и придёт)
@@ -77,7 +84,9 @@ class Model extends BaseModel
 
 
 				// если ПОСТ который пришёл отличается от того который был (например сменилась родительская категория и соответственно parent_id) 
-				if ($old_data[$update_rows['where']] !== $_POST[$update_rows['where']]) {
+				//if ($old_data[$update_rows['where']] !== $_POST[$update_rows['where']]) {
+
+				if (($old_data[$update_rows['where']] ?? null) !== $postWhereValue) {
 
 					// в переменную получим из таблицы, количество элементов (в родительской категории, котора была)
 
@@ -114,7 +123,10 @@ class Model extends BaseModel
 					// получим другие (обновлённые) стартовые позиции (относително нового parent_id)
 					$start_pos = $this->get($table, [
 						'fields' => ['COUNT(*) as count'],
-						'where' => [$update_rows['where'] => $_POST[$update_rows['where']]],
+						//'where' => [$update_rows['where'] => $_POST[$update_rows['where']]],
+						'where' => [
+							$update_rows['where'] => $postWhereValue
+						],
 						'no_concat' => true
 					])[0]['count'] + 1;
 				}
@@ -124,7 +136,10 @@ class Model extends BaseModel
 				// Сначала получим стартовую позицию
 				$start_pos = $this->get($table, [
 					'fields' => ['COUNT(*) as count'],
-					'where' => [$update_rows['where'] => $_POST[$update_rows['where']]],
+					//'where' => [$update_rows['where'] => $_POST[$update_rows['where']]],
+					'where' => [
+						$update_rows['where'] => $postWhereValue
+					],
 					'no_concat' => true
 				])[0]['count'] + 1;
 			}

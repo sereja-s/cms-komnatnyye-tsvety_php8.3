@@ -19,7 +19,19 @@
 						<?php foreach ($value['sub'] as $item) : ?>
 
 							<label class="custom_label" for="<?= $name ?>-<?= $item['id'] ?>">
-								<input id="<?= $name ?>-<?= $item['id'] ?>" type="checkbox" name="<?= $row ?>[<?= $name ?>][]" value="<?= $item['id'] ?>" <?php if (in_array($item['id'], $this->data[$row][$name])) echo 'checked' ?>>
+
+
+								<?php
+								$selected = (array)($this->data[$row][$name] ?? []);
+								?>
+
+								<input
+									id="<?= $name ?>-<?= $item['id'] ?>"
+									type="checkbox"
+									name="<?= $row ?>[<?= $name ?>][]"
+									value="<?= $item['id'] ?>"
+									<?= in_array($item['id'], $selected, true) ? 'checked' : '' ?>>
+
 								<span class="custom_check backgr_bef"></span>
 								<span class="label"><?= $item['name'] ?></span>
 							</label>

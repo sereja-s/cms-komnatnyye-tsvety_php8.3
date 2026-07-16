@@ -4,6 +4,10 @@
 // (т.е. прямой доступ к подключаемым ниже файлам будет запрещён до выполнения файла: index.php)
 define('VG_ACCESS', true);
 
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
+
 // используя функцю header(), отправим браузеру пользователя заголовки с типом контента и кодировкой до того как сделан вывод на экран
 header('Content-Type: text/html; charset=utf-8');
 
@@ -37,4 +41,6 @@ try {
 } catch (DbException $e) {
 	exit($e->showMessage());
 	//exit($e->getMessage());
+} catch (\Throwable $e) {
+	exit($e->getMessage());
 }

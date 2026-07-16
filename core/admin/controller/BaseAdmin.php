@@ -339,7 +339,7 @@ abstract class BaseAdmin extends BaseController
 				}
 
 				// если в массиве с переводом нет ячейки с именем, которое содержится в переменной: $name
-				if (!$this->translate[$name]) {
+				if (empty($this->translate[$name])) {
 					// добавим name в массив: translate[] (и будем выводить название поля как наазвание таблицы)
 					// (обращаемся к $this->translate, его ячейке [$name], далее обращаемся к её первой(здесь- единственной) ячейке, т.е. нулевой) и записываем: $name
 					$this->translate[$name][] = $name;
@@ -399,7 +399,7 @@ abstract class BaseAdmin extends BaseController
 				$this->blocks[$default][] = $name;
 			}
 
-			if (!$this->translate[$name]) {
+			if (empty($this->translate[$name])) {
 
 				$this->translate[$name][] = $name;
 			}
@@ -424,7 +424,7 @@ abstract class BaseAdmin extends BaseController
 			foreach ($this->columns as $name => $item) {
 
 				// проверим существует ли в св-ве: radio, которое пришло, то поле , которое нам необхдимо шаблониизировать (здесь- visible) если такое поле есть (и в него что то пришло)
-				if ($radio[$name]) {
+				if (!empty($radio[$name])) {
 
 					// то сохраним его в массиве: foreignData его ячейке: name
 					$this->foreignData[$name] = $radio[$name];
@@ -520,7 +520,13 @@ abstract class BaseAdmin extends BaseController
 			$settings = Settings::instance();
 		}
 
-		$id = $_POST[$this->columns['id_row']] ?: false;
+		//$id = $_POST[$this->columns['id_row']] ?: false;
+
+		$idField = $this->columns['id_row'] ?? null;
+
+		$id = $idField && isset($_POST[$idField])
+			? $_POST[$idField]
+			: false;
 
 		// получим свойство для валидации
 		$validate = $settings::get('validation');
@@ -547,9 +553,9 @@ abstract class BaseAdmin extends BaseController
 
 				if ($validate) {
 					// если в массиве: $validate (его ячейке: $key) что то есть
-					if ($validate[$key]) {
+					if (!empty($validate[$key])) {
 
-						if ($this->translate[$key]) {
+						if (!empty($this->translate[$key])) {
 							// сформируем переменную: $answer (базовый ответ, который будем отдавать пользователю)
 							$answer = $this->translate[$key][0];
 						} else {
@@ -558,7 +564,7 @@ abstract class BaseAdmin extends BaseController
 						}
 
 						// сначала проверим есть ли свойство: crypt (шифрование)
-						if ($validate[$key]['crypt']) {
+						if (!empty($validate[$key]['crypt'])) {
 
 							if ($id) {
 
@@ -577,22 +583,22 @@ abstract class BaseAdmin extends BaseController
 						}
 
 						// делаем валидацию по остальным свойствам (если они указаны в настройках)
-						if ($validate[$key]['empty']) {
+						if (!empty($validate[$key]['empty'])) {
 
 							$this->emptyFields($item, $answer, $arr);
 						}
 
-						if ($validate[$key]['trim']) {
+						if (!empty($validate[$key]['trim'])) {
 
 							$arr[$key] = trim($item);
 						}
 
-						if ($validate[$key]['int']) {
+						if (!empty($validate[$key]['int'])) {
 
 							$arr[$key] = $this->clearNum($item);
 						}
 
-						if ($validate[$key]['count']) {
+						if (!empty($validate[$key]['count'])) {
 
 							$this->countChar($item, $validate[$key]['count'], $answer, $arr);
 						}
@@ -612,6 +618,7 @@ abstract class BaseAdmin extends BaseController
 	{
 		$id = false;
 		$method = 'add';
+		$where = [];
 
 		// +Выпуск №95 
 		if (!empty($_POST['return_id'])) {
@@ -619,7 +626,7 @@ abstract class BaseAdmin extends BaseController
 			$returnId = true;
 		}
 
-		if ($_POST[$this->columns['id_row']]) {
+		if (!empty($_POST[$this->columns['id_row']])) {
 
 			// проверим: is_numeric() — определяет, является ли переменная числом или числовой строкой
 			$id = is_numeric($_POST[$this->columns['id_row']]) ?
@@ -643,7 +650,10 @@ abstract class BaseAdmin extends BaseController
 				// сначала выполнится сравнение: !$_POST[$key] (если он пустой, сюда придёт не false (будет равно true)) и 
 				// только тогда выполнится строка: $_POST[$key] = 'NOW()'
 				// (в MySQL функция NOW() возвращает текущую дату и время)
-				!$_POST[$key] && $_POST[$key] = 'NOW()';
+				/* !$_POST[$key] && $_POST[$key] = 'NOW()'; */
+				if (empty($_POST[$key])) {
+					$_POST[$key] = 'NOW()';
+				}
 			}
 		}
 
@@ -751,7 +761,7 @@ abstract class BaseAdmin extends BaseController
 			foreach ($arr as $key => $item) {
 
 				// если поля: columns[$key] не существует или оно пустое
-				if (!$this->columns[$key]) {
+				if (empty($this->columns[$key])) {
 
 					// исключим поле: [$key] из добавления в БД
 					$except[] = $key;
@@ -830,13 +840,13 @@ abstract class BaseAdmin extends BaseController
 	protected function createAlias($id = false)
 	{
 		// работать метод должен только, если в данной таблице есть поле: alias
-		if ($this->columns['alias']) {
+		if (!empty($this->columns['alias'])) {
 
 			// если в посте поле: alias не приходит (т.е. пользователь админки это поле не заполнил), то мы должны его сформировать автоматически
-			if (!$_POST['alias']) {
+			if (empty($_POST['alias'])) {
 
 				// если ячейка: ['name'] в посте есть
-				if ($_POST['name']) {
+				if (!empty($_POST['name'])) {
 
 					// то сформируем переменную: alias_str
 					$alias_str = $this->clearStr($_POST['name']);
@@ -896,7 +906,9 @@ abstract class BaseAdmin extends BaseController
 				'where' => $where,
 				'operand' => $operand,
 				'limit' => '1'
-			])[0];
+			]);
+
+			$res_alias = $res[0] ?? null;
 
 			if (!$res_alias) {
 
@@ -916,7 +928,7 @@ abstract class BaseAdmin extends BaseController
 			}
 
 			// если всё отработало хорошо и что то пришло в $_POST['alias'] и есть id (т.е. работаем в системе редактирования)
-			if ($_POST['alias'] && $id) {
+			if (!empty($_POST['alias']) && $id) {
 
 				// здесь- ф-ия php: method_exists() — проверяет, существует ли в нашем объекте: $this метод :
 				//  checkOldAlias(), то вызовем этот метод (для хранения старых ссылок (для корректной работы с 
@@ -1025,7 +1037,7 @@ abstract class BaseAdmin extends BaseController
 		$order = [];
 
 		// если есть родитель (поле: parent_id), то надо делать сортировки по родителю
-		if ($columns['parent_id']) {
+		if (!empty($columns['parent_id'])) {
 
 			$order[] = $parent_id = 'parent_id';
 		}
@@ -1093,7 +1105,7 @@ abstract class BaseAdmin extends BaseController
 					}
 
 					// если ячейки: $tables[$otherKey] в массиве (в св-ве: $translate) нет (т.е. название таблицы не имеет перевода)
-					if (!$this->translate[$tables[$otherKey]]) {
+					/* if (!$this->translate[$tables[$otherKey]]) {
 
 						// если в свойстве: private $projectTables (в полученных проектных таблицах) есть ячейка: $tables[$otherKey]
 						if ($settings::get('projectTables')[$tables[$otherKey]]) {
@@ -1101,6 +1113,18 @@ abstract class BaseAdmin extends BaseController
 							// то заполним св-во: $translate (его ячейку: $tables[$otherKey])
 							// сохраним в нём массив из полученного св-ва: projectTables его ячейки: $tables[$otherKey]['name']
 							$this->translate[$tables[$otherKey]] = [$settings::get('projectTables')[$tables[$otherKey]]['name']];
+						}
+					} */
+
+					if (empty($this->translate[$tables[$otherKey]])) {
+
+						$projectTables = $settings::get('projectTables');
+
+						if (!empty($projectTables[$tables[$otherKey]]['name'])) {
+
+							$this->translate[$tables[$otherKey]] = [
+								$projectTables[$tables[$otherKey]]['name']
+							];
 						}
 					}
 
@@ -1144,7 +1168,7 @@ abstract class BaseAdmin extends BaseController
 					$foreign = [];
 
 					// Если заполнено св-во: $data (т.е. мы работаем в режиме редактирования) В него попадают все данные той или иной записи БД То нам необходимо получить данные, которые хранятся в полях связанныъ таблиц
-					if ($this->data) {
+					if (!empty($this->data)) {
 
 						// в переменную: $res сохраним результат работы метода: get() нашей модели На вход ему 
 						// передаём:1- откуда данные должны получить (наша таблица связи: $mTable, 2- какие данные нужно 
@@ -1244,7 +1268,7 @@ abstract class BaseAdmin extends BaseController
 						//exit;
 
 						// если ячейки: $tables['type'] нет, а ячейка: $orderData['parent_id'] есть
-					} elseif ($orderData['parent_id']) {
+					} elseif (!empty($orderData['parent_id'])) {
 
 						$parent = $tables[$otherKey];
 
@@ -1506,7 +1530,8 @@ abstract class BaseAdmin extends BaseController
 					]);
 
 					// если с поста что то пришло
-					if ($_POST[$tables[$otherKey]]) {
+					//if ($_POST[$tables[$otherKey]]) {
+					if (isset($_POST[$tables[$otherKey]]) && is_array($_POST[$tables[$otherKey]])) {
 
 						// начинаем формировать массив для множественной вставки
 						$insertArr = [];
@@ -1565,7 +1590,10 @@ abstract class BaseAdmin extends BaseController
 		// в ячейке: REFERENCED_TABLE_NAME массива: $arr, хранится имя таблицы на которую ссылаемся
 		$orderData = $this->createOrderData($arr['REFERENCED_TABLE_NAME']);
 
-		if ($this->data) {
+		$where = [];
+		$operand = [];
+
+		if (!empty($this->data)) {
 
 			// если ссылка идёт на самих себя
 			if ($arr['REFERENCED_TABLE_NAME'] === $this->table) {
@@ -1595,7 +1623,7 @@ abstract class BaseAdmin extends BaseController
 
 		if ($foreign) {
 
-			if ($this->foreignData[$arr['COLUMN_NAME']]) {
+			if (!empty($this->foreignData[$arr['COLUMN_NAME']])) {
 
 				foreach ($foreign as $value) {
 
@@ -1630,7 +1658,7 @@ abstract class BaseAdmin extends BaseController
 			}
 
 			// если ключи не пришли, но есть поле: parent_id, то
-		} elseif ($this->columns['parent_id']) {
+		} elseif (!empty($this->columns['parent_id'])) {
 
 			// Формируем элементы массива:
 
@@ -1654,7 +1682,9 @@ abstract class BaseAdmin extends BaseController
 	{
 
 		// если ячейка: menu_position (в массиве: columns) существует (и в неё что то пришло)
-		if ($this->columns['menu_position']) {
+		if (!empty($this->columns['menu_position'])) {
+
+			$where = '';
 
 			// если настройки ещё не получены
 			if (!$settings) {
@@ -1666,7 +1696,7 @@ abstract class BaseAdmin extends BaseController
 			// получим из файла настроек св-во: rootItems
 			$rootItems = $settings::get('rootItems');
 
-			if ($this->columns['parent_id']) {
+			if (!empty($this->columns['parent_id'])) {
 
 				// если в массиве: rootItems (его ячейке: tables есть то,что хранится в свойстве: table (название таблицы))
 				if (in_array($this->table, $rootItems['tables'])) {
@@ -1680,7 +1710,11 @@ abstract class BaseAdmin extends BaseController
 					// запросим внешние ключи
 					// (в параметры ф-ии передаём: название таюлицы и ключ (в виде строки)), в конце указываем, что в $parent нам
 					// вся выборка не нужна (нужно вернуть нулевой элемент (здесь он или будет или не будет))
-					$parent = $this->model->showForeignKeys($this->table, 'parent_id')[0];
+					//$parent = $this->model->showForeignKeys($this->table, 'parent_id')[0];
+
+					$res = $this->model->showForeignKeys($this->table, 'parent_id');
+
+					$parent = $res[0] ?? null;
 
 					// если родитель пришёл
 					if ($parent) {
@@ -1693,7 +1727,7 @@ abstract class BaseAdmin extends BaseController
 
 							$columns = $this->model->showColumns($parent['REFERENCED_TABLE_NAME']);
 
-							if ($columns['parent_id']) {
+							if (!empty($columns['parent_id'])) {
 
 								// в элемент массива: order сохраним строку: parent_id
 								$order[] = 'parent_id';
@@ -1704,14 +1738,22 @@ abstract class BaseAdmin extends BaseController
 								$order[] = $parent['REFERENCED_COLUMN_NAME'];
 							}
 
-							$id = $this->model->get($parent['REFERENCED_TABLE_NAME'], [
+							/* $id = $this->model->get($parent['REFERENCED_TABLE_NAME'], [
 								// укажем какие поля из поданного на вход функции: get() массива: parent (его ячейки: 
 								// REFERENCED_TABLE_NAME) должны получить
 								'fields' => [$parent['REFERENCED_COLUMN_NAME']],
 								'order' => $order,
 								'limit' => '1'
 							])[0][$parent['REFERENCED_COLUMN_NAME']]; // укажем, что вернуть надо нулевой элемент той выборки, 
-							// которая пришла (и то поле, которое мы запрашиваем)
+							// которая пришла (и то поле, которое мы запрашиваем) */
+
+							$res = $this->model->get($parent['REFERENCED_TABLE_NAME'], [
+								'fields' => [$parent['REFERENCED_COLUMN_NAME']],
+								'order'  => $order,
+								'limit'  => '1'
+							]);
+
+							$id = $res[0][$parent['REFERENCED_COLUMN_NAME']] ?? null;
 
 							if ($id) {
 								$where = ['parent_id' => $id];
@@ -1724,7 +1766,7 @@ abstract class BaseAdmin extends BaseController
 				}
 			}
 
-			$menu_pos = $this->model->get($this->table, [
+			/* $menu_pos = $this->model->get($this->table, [
 				// укажем какие поля из поданной на вход функции: get() таблицы (в св-ве: table) должны получить
 				// (здесь в значении поля: fields указываем СУБД: посчитай всё и предоставь эту выборку с псевдонимом: count)
 				'fields' => ['COUNT(*) as count'],
@@ -1735,7 +1777,15 @@ abstract class BaseAdmin extends BaseController
 			// (+Выпуск №88)
 			// Для редактирования (edit), $menu_pos не увеличиваем
 			// имеем: если $this->data пришла, то !$this->data даёт false, а значит (int)!$this->data = 0 (для edit),
-			// а если $this->data не пришла, то !$this->data даёт true, а значит (int)!$this->data = 1 (для add)
+			// а если $this->data не пришла, то !$this->data даёт true, а значит (int)!$this->data = 1 (для add) */
+
+			$res = $this->model->get($this->table, [
+				'fields' => ['COUNT(*) as count'],
+				'where' => $where,
+				'no_concat' => true
+			]);
+
+			$menu_pos = ($res[0]['count'] ?? 0) + (int)!$this->data;
 
 			for ($i = 1; $i <= $menu_pos; $i++) {
 

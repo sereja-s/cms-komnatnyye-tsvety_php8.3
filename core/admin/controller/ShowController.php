@@ -48,7 +48,7 @@ class ShowController extends BaseAdmin
 		$this->quantities = [3, 6, 15, 25, 35];
 
 		// если поля columns с ячейкой id_row не пришли из БД
-		if (!$this->columns['id_row']) {
+		if (empty($this->columns['id_row'])) {
 			// вернём в свойство $this->data пустой массив (св-во $this->data изначально и так с пустым массивом (по умолчанию))
 			return $this->data = [];
 		}
@@ -59,7 +59,7 @@ class ShowController extends BaseAdmin
 		$fields[] = $this->columns['id_row'] . ' as id';
 
 		// проверим есть ли в полях в св-ве columns ячейки name и img
-		if ($this->columns['name']) {
+		if (!empty($this->columns['name'])) {
 
 			// если есть в св-ве columns ячейка name, то в массив $fields (его ячейку name) запишем слово: name
 			// (изначально в $fields призодит нумерованнцй массив, а имена даём для удобства работы с ним)
@@ -67,7 +67,7 @@ class ShowController extends BaseAdmin
 		}
 
 		// тоже самое проделаем для ячейки img
-		if ($this->columns['img']) {
+		if (!empty($this->columns['img'])) {
 
 			$fields['img'] = 'img';
 		}
@@ -79,13 +79,13 @@ class ShowController extends BaseAdmin
 			foreach ($this->columns as $key => $item) {
 
 				// если нет ячейки name и в переменой key (ключе) ищем на любой позиции слово name (и находим т.е. строго не равно false)
-				if (!$fields['name'] && strpos($key, 'name') !== false) {
+				if (empty($fields['name']) && strpos($key, 'name') !== false) {
 					// то в массиве fields (ячейке name) сохраняем ключ и конкатенируем к нему псевдоним поля (через пробел): as name
 					$fields['name'] = $key . ' as name';
 				}
 
 				// тоже самое проделаем для ячейки img (только ищем строгое равенство нулю (т.е. стоит на первом месте массива))
-				if (!$fields['img'] && strpos($key, 'img') === 0) {
+				if (empty($fields['img']) && strpos($key, 'img') === 0) {
 
 					$fields['img'] = $key . ' as img';
 				}
@@ -94,7 +94,7 @@ class ShowController extends BaseAdmin
 
 		// если на вход пришёл массив $arr и его ячейка: fields, добавляем его к текущей выборке $fields (значит нашему 
 		// вспомогательному шаблону нужны какие то дополнительные данные)
-		if ($arr['fields']) {
+		if (!empty($arr['fields'])) {
 
 			if (is_array($arr['fields'])) {
 
@@ -110,26 +110,26 @@ class ShowController extends BaseAdmin
 		}
 
 		// проверим наличие ячейки: parent_id в выборке: columns (если есть, то по ней первой будем сортировать)
-		if ($this->columns['parent_id']) {
+		if (!empty($this->columns['parent_id'])) {
 
 			// если нет в массиве: fields ячейки: parent_id, то в добавим в массив: fields строку: parent_id
-			if (!in_array('parent_id', $fields)) $fields[] = 'parent_id';
+			if (!in_array('parent_id', $fields, true)) $fields[] = 'parent_id';
 
 			// также в массив: order добавм строку: parent_id
 			$order[] = 'parent_id';
 		}
 
 		// проверим наличие ячейки: menu_position в выборке: columns Если она есть,
-		if ($this->columns['menu_position']) {
+		if (!empty($this->columns['menu_position'])) {
 
 			// то в массив: order добавм строку: menu_position () (что бы теперь по ней сортировались)
 			$order[] = 'menu_position';
 
 			// дополнительная проверка: если есть ячейка: дата в выборке: columns
-		} elseif ($this->columns['date']) {
+		} elseif (!empty($this->columns['date'])) {
 
 			// если в order уже что то есть (т.е. пришло parent_id, а значит способ сортировки (order_direction): ASC)
-			if ($order) {
+			if (!empty($order)) {
 
 				// то в order_direction запишем массив: 1-ое поле (parent_id) сортировать как ASC, а 2-ое (date)-как DESC
 				$order_direction = ['ASC', 'DESC'];
@@ -144,7 +144,7 @@ class ShowController extends BaseAdmin
 		}
 
 		// если пришёл массив $arr и его ячейка: order, добавляем его к текущей выборке $order
-		if ($arr['order']) {
+		if (!empty($arr['order'])) {
 
 			if (is_array($arr['order'])) {
 				// склеим массивы, переданные в параметры нашей ф-ии: arrayMergeRecursive() и сохраним в св-ве $order
@@ -159,14 +159,14 @@ class ShowController extends BaseAdmin
 		}
 
 		// аналогично действуем с выборкой: $order_direction
-		if ($arr['order_direction']) {
+		if (!empty($arr['order_direction'])) {
 
 			if (is_array($arr['order_direction'])) {
 
 				$order_direction = Settings::instance()->arrayMergeRecursive($order_direction, $arr['order_direction']);
 			} else {
 
-				$order_direction[] = $order_direction['order_direction'];
+				$order_direction[] = $arr['order_direction'];
 			}
 		}
 
@@ -185,9 +185,13 @@ class ShowController extends BaseAdmin
 			]
 		]);
 
+		/* echo '<pre>';
+		print_r($this->data);
+		echo '</pre>';
+		exit; */
+
 		// в переменной сохраним результат работы метода, который формирует и возвращает массив с постраничной навигацией 
 		// (Выпуск №136) в BaseModelMethods
 		$this->pages = $this->model->getPagination();
-		$a = 1;
 	}
 }

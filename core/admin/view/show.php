@@ -15,10 +15,12 @@
 		<?php foreach ($this->data as $data) : ?>
 
 			<div class="vg-element vg-fourth">
-				<a href="<?= $data['alias'] ?: $this->adminPath . 'edit/' . $this->table . '/' . $data['id'] ?>" class="vg-wrap vg-element vg-full vg-firm-background-color4 vg-box-shadow show_element">
+				<a href="<?= !empty($data['alias'])
+								? $data['alias']
+								: ($this->adminPath . 'edit/' . $this->table . '/' . (int)($data['id'] ?? 0)) ?>" class="vg-wrap vg-element vg-full vg-firm-background-color4 vg-box-shadow show_element">
 					<div class="vg-element vg-half vg-center">
 
-						<?php if ($data['img']) : ?>
+						<?php if (!empty($data['img'])) : ?>
 
 							<img src="<?= PATH . UPLOAD_DIR . $data['img'] ?>" alt="">
 
@@ -26,7 +28,7 @@
 
 					</div>
 					<div class="vg-element vg-half vg-center">
-						<span class="vg-text vg-firm-color1"><?= $data['name'] ?></span>
+						<span class="vg-text vg-firm-color1"><?= $data['name'] ?? $data['id'] ?></span>
 					</div>
 				</a>
 			</div>

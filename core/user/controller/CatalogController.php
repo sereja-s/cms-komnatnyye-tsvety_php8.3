@@ -47,39 +47,14 @@ class CatalogController extends BaseUser
 			if (!$data) {
 				throw new RouteException('Не найдены записи в таблице catalog по ссылке ' . $this->parameters['alias']);
 			}
-
-			//$data = $data[0];
 		}
-
 
 		// сформируем инструкцию для товаров
 		$where['visible'] = 1;
-		//$visibleOperand = '=';
 
-		/* if (!empty($data) && is_array($data)) {
-
-			if (count(($data)) >= 2) {
-
-				foreach ($data as $item) {
-
-					$where['id'][] = $this->clearNum($item['goods_id']);
-				}
-				$data['name'] = $data[0]['name'];
-				$data['keywords'] = $data[0]['keywords'];
-				$data['content'] = $data[0]['content'];
-				$data['short_content'] = $data[0]['short_content'];
-				$data['img'] = $data[0]['img'];
-				$data['main_img'] = $data[0]['main_img'];
-				$where['id'] = implode(',', $where['id']);
-				$goodsOperand = 'IN';
-			} else {
-
-				$data = $data[0];
-				$data['name'] = $data['name'];
-				$where['id'] = $data['goods_id'];
-				$goodsOperand = '=';
-			}
-		} */
+		// Операнд для фильтрации товаров по категории.
+		// По умолчанию не используется.
+		/* $goodsOperand = null;
 
 		if (!empty($data) && is_array($data)) {
 			if (count($data) >= 2) {
@@ -106,6 +81,40 @@ class CatalogController extends BaseUser
 				$where['id'] = $data['goods_id'] ?? '';
 				$goodsOperand = '=';
 			}
+		} */
+
+		$goodsOperand = null;
+
+		if (!empty($data) && is_array($data)) {
+
+			if (count($data) > 1) {
+
+				foreach ($data as $item) {
+					$where['id'][] = $this->clearNum($item['goods_id']);
+				}
+
+				$firstItem = $data[0];
+
+				$data = [
+					'name'          => $firstItem['name'] ?? '',
+					'keywords'      => $firstItem['keywords'] ?? '',
+					'content'       => $firstItem['content'] ?? '',
+					'short_content' => $firstItem['short_content'] ?? '',
+					'img'           => $firstItem['img'] ?? '',
+					'main_img'      => $firstItem['main_img'] ?? '',
+				];
+
+				$where['id'] = implode(',', $where['id']);
+
+				$goodsOperand = 'IN';
+			} else {
+
+				$data = $data[0] ?? [];
+
+				$where['id'] = $data['goods_id'] ?? '';
+
+				$goodsOperand = '=';
+			}
 		}
 
 
@@ -123,10 +132,15 @@ class CatalogController extends BaseUser
 		// Выпуск №132
 		$operand = $this->checkFilters($where);
 
-		if ($data['name'] !== 'Каталог') {
-
-
+		/* if ($data['name'] !== 'Каталог') {
 			array_push($operand, $goodsOperand);
+		} */
+
+		if (
+			($data['name'] ?? '') !== 'Каталог' &&
+			$goodsOperand !== null
+		) {
+			$operand[] = $goodsOperand;
 		}
 
 		// Получим товары (с их фильтрами и ценами):
@@ -178,6 +192,10 @@ class CatalogController extends BaseUser
 
 			// preg_split — Разбивает строку по регулярному выражению
 			$orderArr = preg_split('/_+/', $_GET['order'], 0, PREG_SPLIT_NO_EMPTY);
+
+			if (empty($orderArr[0])) {
+				return $order;
+			}
 
 			if (!empty($this->model->showColumns('goods')[$orderArr[0]])) {
 
@@ -254,7 +272,9 @@ class CatalogController extends BaseUser
 			]); */
 		}
 
-		$where = array_merge($dbWhere, $where);
+		//$where = array_merge($dbWhere, $where);
+
+		$where = array_merge($dbWhere, $where ?? []);
 
 		$dbOperand[] = '=';
 
@@ -266,6 +286,10 @@ class CatalogController extends BaseUser
 	 */
 	protected function setFilters()
 	{
+		if (empty($_GET['filters']) || !is_array($_GET['filters'])) {
+			return '';
+		}
+
 		foreach ($_GET['filters'] as $key => $item) {
 
 			$_GET['filters'][$key] = $this->clearNum($item);
@@ -282,6 +306,10 @@ class CatalogController extends BaseUser
 
 			if ($other !== false && $other !== $key)
 				unset($_GET['filters'][$key]);
+		}
+
+		if (empty($_GET['filters'])) {
+			return '';
 		}
 
 		// получим фильтры с привязкой к родителям
@@ -355,6 +383,9 @@ class CatalogController extends BaseUser
 	 */
 	protected function crossDiffArr($arr, $counter = 0)
 	{
+		if (empty($arr)) {
+			return [];
+		}
 		// если в массиве массивов пришёл только один элемент(массив)
 		if (count($arr) === 1) {
 
