@@ -3654,7 +3654,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 		-ms-transform: translate(0px, 10px);
 		transform: translate(0px, 10px);
 		visibility: hidden;
-		min-width: 275px;
+		min-width: 245px;
 		left: 0;
 		pointer-events: none;
 		position: absolute;
