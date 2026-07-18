@@ -166,30 +166,41 @@
 			<span style="background-image: url('<?= PATH . TEMPLATE ?>assets/img/vn.png'); background-size: 100%;" class=" ml_bgimg ml_icon ml_icon-close"></span>
 		</label>
 
-		<a class="ml_icon ml_icon_link" href="<?= $this->set['external_alias_max'] ?>">
-			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000">
-				<defs>
-					<linearGradient id="b">
-						<stop offset="0" stop-color="#00f" />
-						<stop offset="1" stop-opacity="0" />
-					</linearGradient>
-					<linearGradient id="a">
-						<stop offset="0" stop-color="#4cf" />
-						<stop offset=".662" stop-color="#53e" />
-						<stop offset="1" stop-color="#93d" />
-					</linearGradient>
-					<linearGradient id="c" x1="117.847" x2="1000" y1="760.536" y2="500" gradientUnits="userSpaceOnUse" href="#a" />
-					<radialGradient id="d" cx="-87.392" cy="1166.116" r="500" fx="-87.392" fy="1166.116" gradientTransform="rotate(51.356 1551.478 559.3)scale(2.42703433 1)" gradientUnits="userSpaceOnUse" href="#b" />
-				</defs>
-				<rect width="1000" height="1000" fill="url(#c)" ry="249.681" />
-				<rect width="1000" height="1000" fill="url(#d)" ry="249.681" />
-				<path fill="#fff" fill-rule="evenodd" d="M508.211 878.328c-75.007 0-109.864-10.95-170.453-54.75-38.325 49.275-159.686 87.783-164.979 21.9 0-49.456-10.95-91.248-23.36-136.873-14.782-56.21-31.572-118.807-31.572-209.508 0-216.626 177.754-379.597 388.357-379.597 210.785 0 375.947 171.001 375.947 381.604.707 207.346-166.595 376.118-373.94 377.224m3.103-571.585c-102.564-5.292-182.499 65.7-200.201 177.024-14.6 92.162 11.315 204.398 33.397 210.238 10.585 2.555 37.23-18.98 53.837-35.587a189.8 189.8 0 0 0 92.71 33.032c106.273 5.112 197.08-75.794 204.215-181.95 4.154-106.382-77.67-196.486-183.958-202.574Z" clip-rule="evenodd" />
-			</svg></a>
-		<a class="ml_icon ml_icon_link" href="<?= $this->set['external_alias_max'] ?>">
-			<svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-				<path d="M25 50C38.8071 50 50 38.8071 50 25C50 11.1929 38.8071 0 25 0C11.1929 0 0 11.1929 0 25C0 38.8071 11.1929 50 25 50Z" fill="#0087D0"></path>
-				<path d="M36.11 13.0399L9.40999 22.7999C8.86999 22.9999 8.85999 23.7999 9.38999 24.0299L16.23 26.7199L18.78 34.4099C18.93 34.8199 19.47 34.9599 19.81 34.6799L23.73 31.1899L31.17 35.9099C31.55 36.1499 32.06 35.9399 32.15 35.5099L36.99 13.7599C37.09 13.2799 36.59 12.8699 36.11 13.0599V13.0399ZM20.03 28.1599L19.6 32.1199L17.53 26.0299L32.1 16.8699L20.03 28.1699V28.1599Z" fill="white"></path>
-			</svg></a>
+		<?php if (!empty($this->set['external_alias_max'])) : ?>
+
+			<a class="ml_icon ml_icon_link" href="<?= $this->set['external_alias_max'] ?>">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 1000">
+					<defs>
+						<linearGradient id="b">
+							<stop offset="0" stop-color="#00f" />
+							<stop offset="1" stop-opacity="0" />
+						</linearGradient>
+						<linearGradient id="a">
+							<stop offset="0" stop-color="#4cf" />
+							<stop offset=".662" stop-color="#53e" />
+							<stop offset="1" stop-color="#93d" />
+						</linearGradient>
+						<linearGradient id="c" x1="117.847" x2="1000" y1="760.536" y2="500" gradientUnits="userSpaceOnUse" href="#a" />
+						<radialGradient id="d" cx="-87.392" cy="1166.116" r="500" fx="-87.392" fy="1166.116" gradientTransform="rotate(51.356 1551.478 559.3)scale(2.42703433 1)" gradientUnits="userSpaceOnUse" href="#b" />
+					</defs>
+					<rect width="1000" height="1000" fill="url(#c)" ry="249.681" />
+					<rect width="1000" height="1000" fill="url(#d)" ry="249.681" />
+					<path fill="#fff" fill-rule="evenodd" d="M508.211 878.328c-75.007 0-109.864-10.95-170.453-54.75-38.325 49.275-159.686 87.783-164.979 21.9 0-49.456-10.95-91.248-23.36-136.873-14.782-56.21-31.572-118.807-31.572-209.508 0-216.626 177.754-379.597 388.357-379.597 210.785 0 375.947 171.001 375.947 381.604.707 207.346-166.595 376.118-373.94 377.224m3.103-571.585c-102.564-5.292-182.499 65.7-200.201 177.024-14.6 92.162 11.315 204.398 33.397 210.238 10.585 2.555 37.23-18.98 53.837-35.587a189.8 189.8 0 0 0 92.71 33.032c106.273 5.112 197.08-75.794 204.215-181.95 4.154-106.382-77.67-196.486-183.958-202.574Z" clip-rule="evenodd" />
+				</svg>
+			</a>
+
+		<?php endif; ?>
+
+		<?php if (!empty($this->set['external_alias_tel'])) : ?>
+
+			<a class="ml_icon ml_icon_link" href="<?= $this->set['external_alias_tel'] ?>">
+				<svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<path d="M25 50C38.8071 50 50 38.8071 50 25C50 11.1929 38.8071 0 25 0C11.1929 0 0 11.1929 0 25C0 38.8071 11.1929 50 25 50Z" fill="#0087D0"></path>
+					<path d="M36.11 13.0399L9.40999 22.7999C8.86999 22.9999 8.85999 23.7999 9.38999 24.0299L16.23 26.7199L18.78 34.4099C18.93 34.8199 19.47 34.9599 19.81 34.6799L23.73 31.1899L31.17 35.9099C31.55 36.1499 32.06 35.9399 32.15 35.5099L36.99 13.7599C37.09 13.2799 36.59 12.8699 36.11 13.0599V13.0399ZM20.03 28.1599L19.6 32.1199L17.53 26.0299L32.1 16.8699L20.03 28.1699V28.1599Z" fill="white"></path>
+				</svg></a>
+
+		<?php endif; ?>
+
 		<a class="ml_icon ml_icon_link" href="tel:<?= preg_replace('/[^+\d]/', '', $this->set['phone']) ?>">
 			<svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
 				<path d="M25 43C34.9411 43 43 34.9411 43 25C43 15.0589 34.9411 7 25 7C15.0589 7 7 15.0589 7 25C7 34.9411 15.0589 43 25 43Z" fill="white"></path>

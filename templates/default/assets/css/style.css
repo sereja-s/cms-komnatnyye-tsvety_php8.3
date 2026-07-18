@@ -2558,9 +2558,9 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 	grid-template-columns: 285px 1fr 210px;
 	padding-top: 50px;
 	padding-bottom: 40px;
-	-webkit-column-gap: 80px;
-	-moz-column-gap: 80px;
-	column-gap: 80px;
+	-webkit-column-gap: 25px;
+	-moz-column-gap: 25px;
+	column-gap: 25px;
 }
 
 .footer__main {
@@ -3654,7 +3654,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 		-ms-transform: translate(0px, 10px);
 		transform: translate(0px, 10px);
 		visibility: hidden;
-		min-width: 245px;
+		min-width: 250px;
 		left: 0;
 		pointer-events: none;
 		position: absolute;
@@ -5406,3 +5406,6 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 	margin-bottom: 35px;
 	line-height: 1.2;
 }
+.catalog-internal p {
+	padding-bottom: 1rem;
+	}

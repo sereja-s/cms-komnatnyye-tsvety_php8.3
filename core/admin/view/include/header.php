@@ -6,6 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<meta type="keywords" content="...">
 	<meta type="description" content="...">
+	<link rel="icon" href="<?= htmlspecialchars(SITE_URL) ?>/favicon.svg" type="image/svg+xml">
 	<title>Админка</title>
 
 	<!-- Подключим стили (Выпуск №67) -->

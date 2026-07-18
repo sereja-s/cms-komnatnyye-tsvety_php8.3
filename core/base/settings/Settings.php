@@ -83,8 +83,8 @@ class Settings
 		'catalog' => ['name' => 'Каталог (меню)'],
 		//'filters' => ['name' => 'Фильтры'],
 		'goods' => ['name' => 'Товары'],
-		'rooms' => ['name' => 'Бренды'],
-		'tips' => ['name' => 'Фото работ'],
+		'rooms' => ['name' => 'Подарки (фото)'],
+		'tips' => ['name' => 'Сундучок (фото)'],
 		'questions' => ['name' => 'Вопросы'],
 		'phones' => ['name' => 'Телефоны'],
 		'emails' => ['name' => 'Эл. почты'],
@@ -108,7 +108,7 @@ class Settings
 	// свойство: массив шаблонов
 	private $templateArr = [
 		// массив вида: 'название шаблона' => массив с полями для которых должен быть подключен соответствующий шаблон
-		'text' => ['name', 'phone', 'email', 'alias', 'external_alias', 'external_alias_max', 'sub_title', 'data_coordinates', 'discount', 'price', 'price_m_opt', 'login', 'password', 'meta_name', 'meta_title', 'meta_keywords'],
+		'text' => ['name', 'phone', 'email', 'alias', 'external_alias', 'external_alias_tel', 'external_alias_max', 'sub_title', 'data_coordinates', 'discount', 'price', 'price_m_opt', 'login', 'password', 'meta_name', 'meta_title', 'meta_keywords'],
 		'textarea' => ['content', 'keywords', 'address', 'description', 'short_content', 'working_time', 'meta_description', 'meta_og_description'],
 		'radio' => ['visible', 'show_top_menu', 'hit', 'new'/*'sale', 'hot'*/],
 		'checkboxlist' => ['catalog'/* , 'filters' */], // указали, что хотим подключить фильтры к связанной таблице: 
@@ -134,6 +134,8 @@ class Settings
 		'working_time' => ['График работы'],
 		'alias' => ['Ссылка ЧПУ'],
 		'external_alias' => ['Внешняя ссылка'],
+		'external_alias_tel' => ['Ссылка на Телеграм'],
+		'external_alias_max' => ['Ссылка на МАХ'],
 		'img' => ['Изображение', '(Одно)'],
 		'main_img' => ['Картинка', '(для ссылки на сайт)'],
 		'gallery_img' => ['галерея изображений', '(Несколько)'],

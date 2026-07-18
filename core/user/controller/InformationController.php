@@ -8,25 +8,31 @@ use core\base\controller\BaseController;
 
 class InformationController extends BaseUser
 {
-
 	protected function inputData()
 	{
-		// Выпуск №120
 		parent::inputData();
 
-		//$data = [];
+		$infoData = [];
 
 		if (!empty($this->menu['information-bottom'])) {
 
 			foreach ($this->menu['information-bottom'] as $item) {
 
-				if ($item['alias'] === ($this->parameters['alias'])) {
+				if (
+					isset($this->parameters['alias']) &&
+					$item['alias'] === $this->parameters['alias']
+				) {
 
-					$infoData['name'] = $item['name'];
-					$infoData['content'] = $item['content'];
+					$infoData = [
+						'name' => $item['name'],
+						'content' => $item['content']
+					];
+
+					break;
 				}
 			}
 		}
+
 		return compact('infoData');
 	}
 }
